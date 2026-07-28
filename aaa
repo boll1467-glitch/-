@@ -1,0 +1,56 @@
+-- ==========================================
+-- Rayfield Interface Suite - Lucky Block Script
+-- ==========================================
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Lucky Block Hub",
+   LoadingTitle = "กำลังโหลด UI...",
+   LoadingSubtitle = "by Rayfield",
+   ConfigurationSaving = {
+      Enabled = false
+   },
+   Discord = {
+      Enabled = false
+   },
+   KeySystem = false
+})
+
+local MainTab = Window:CreateTab("Main", 4483362458) -- ไอคอนหมวดหมู่หลัก
+
+local Section = MainTab:CreateSection("Functions")
+
+local Button = MainTab:CreateButton({
+   Name = "Spawn Lucky Block",
+   Callback = function()
+      -- เรียกใช้งาน RemoteEvent/RemoteFunction ใน ReplicatedStorage
+      local event = game:GetService("ReplicatedStorage"):FindFirstChild("SpawnLuckyBlock")
+      
+      if event then
+         if event:IsA("RemoteEvent") then
+            event:FireServer()
+         elseif event:IsA("BindableEvent") then
+            event:Fire()
+         elseif event:IsA("RemoteFunction") then
+            event:InvokeServer()
+         elseif event:IsA("BindableFunction") then
+            event:Invoke()
+         end
+         
+         Rayfield:Notify({
+            Title = "Success",
+            Content = "เรียกใช้งาน SpawnLuckyBlock เรียบร้อยแล้ว!",
+            Duration = 3,
+            Image = 4483362458,
+         })
+      else
+         Rayfield:Notify({
+            Title = "Error",
+            Content = "ไม่พบ SpawnLuckyBlock ใน ReplicatedStorage",
+            Duration = 3,
+            Image = 4483362458,
+         })
+      end
+   end,
+})
